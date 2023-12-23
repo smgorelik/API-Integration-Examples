@@ -11,6 +11,39 @@ namespace GraphClient
 {
 	class Program
 	{
+		// ListRegisteredApps - requires Application.Read.All permissions
+		public static async Task CheckTokenExpiry(GraphServiceClient graphClient)
+		{
+			try
+			{
+				var apps = await graphClient.Applications.GetAsync((requestConfiguration) =>
+				{
+					/*https://learn.microsoft.com/en-us/graph/aad-advanced-queries?tabs=http#device-properties
+					  https://learn.microsoft.com/en-us/graph/api/resources/device?view=graph-rest-1.0*/
+
+					//Not including  - Workplace (indicates bring your own personal devices)
+					requestConfiguration.QueryParameters.Filter = $"appId eq '{ConfigurationManager.AppSettings["clientId"]}'";
+					requestConfiguration.QueryParameters.Top = 1;
+					requestConfiguration.QueryParameters.Select = new string[] { "appId", "DisplayName", "CreatedDateTime","PasswordCredentials"};
+				});
+				
+				if (apps.Value.Count > 0)
+				{
+					var app = apps.Value[0];
+					Console.WriteLine("{0,-30} {1,10}", app.DisplayName, app.AppId);
+					var creds = app.PasswordCredentials;
+					var token = creds.Find(cred => cred.KeyId == new Guid(ConfigurationManager.AppSettings["SecretId"]));
+					Console.WriteLine("{0,-30} {1,10}", "Remaining days before token expires", (token.EndDateTime - DateTimeOffset.UtcNow).Value.Days);
+				}
+				Console.WriteLine("-----------------------------------------");
+			}
+			catch (ODataError odataError)
+			{
+				Console.WriteLine(odataError.Error.Message);
+			}
+		}
+
+		// ListRegisteredDevices - requires Device.Read.All permissions	
 		public static async Task ListRegisteredDevices(GraphServiceClient graphClient)
 		{
 			var devices = new List<Device>();
@@ -25,7 +58,6 @@ namespace GraphClient
 					requestConfiguration.QueryParameters.Filter = "TrustType eq 'AzureAd' or TrustType eq 'ServerAd'";
 					requestConfiguration.QueryParameters.Select = new string[] { "id", "DisplayName", "OperatingSystem", "ProfileType", "TrustType" };
 				});
-				//Console.WriteLine(result);
 
 				var pageIterator = PageIterator<Device, DeviceCollectionResponse>.CreatePageIterator(graphClient,result,
 						(device) =>
@@ -55,12 +87,10 @@ namespace GraphClient
 		public static async Task Main(string[] args)
 		{
 			string[] scopes = { "https://graph.microsoft.com/.default" };
-			var tenantId = ConfigurationManager.AppSettings["tenantId"];
-			var clientId = ConfigurationManager.AppSettings["clientId"];
-			var secret = ConfigurationManager.AppSettings["appSecret"];
 			var ClientSecretCredential = new ClientSecretCredential(
-				tenantId, clientId, secret);
+				ConfigurationManager.AppSettings["tenantId"], ConfigurationManager.AppSettings["clientId"], ConfigurationManager.AppSettings["SecretValue"]);
 			var graphClient = new GraphServiceClient(ClientSecretCredential, scopes);
+			await CheckTokenExpiry(graphClient);
 			await ListRegisteredDevices(graphClient);
 		}
 	}
