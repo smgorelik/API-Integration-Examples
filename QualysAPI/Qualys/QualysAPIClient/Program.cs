@@ -23,7 +23,12 @@ namespace QualysAPIClient
                 request.AddParameter("truncation_limit",0);
 
                 var result = await client.PostAsync(request);
-
+                if (!result.IsSuccessful)
+                {
+                    Console.WriteLine("Response is not Successful");
+                    return;
+                }
+				
                 XmlDocument xml = new XmlDocument();
                 xml.LoadXml(result.Content);
 
@@ -61,7 +66,12 @@ namespace QualysAPIClient
                 request.AddParameter("qds_min", qds_min);
 
                 var result = await client.PostAsync(request);
-
+                if (!result.IsSuccessful)
+                {
+                    Console.WriteLine("Response is not Successful");
+                    return;
+                }
+				
                 XmlDocument xml = new XmlDocument();
                 xml.LoadXml(result.Content);
 
