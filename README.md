@@ -32,5 +32,8 @@ After obtaining your Client ID and Client Secret, update the Secrets.config file
 
 Token Generation and Usage:
 The provided code facilitates the generation of a temporary token using these credentials. This token is valid for 1 hour and will be used for all API queries. Subsequent requests will require token regeneration upon expiration.
+
 Retrieving Devices:
 Device retrieval varies depending on whether your organization is in a multi-tenant or single-tenant setup. The code examples detail the implementation for each case.
+
+Sophos API Link - https://developer.sophos.com/getting-started-organization
