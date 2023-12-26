@@ -13,9 +13,24 @@ _Developers utilizing this code must define their secret token and other necessa
 Qualys VMP, a renowned vendor for vulnerability prioritization, differs in its approach to API integration. Unlike vendors that use API tokens, Qualys VMP requires the provision of a username, password, and server URL for integration. These credentials should be securely stored in the Secrets.config XML file
 _Ensure that these credentials are correctly configured to establish a successful connection with Qualys_
 
-## SentinelOne Integration
+## Integration with SentinelOne
 SentinelOne, a leading EDR (Endpoint Detection and Response) vendor, enables API integration through the generation of a user-specific token. Each user can generate one token, used for authenticating REST API requests.
 Our examples focus on retrieving device and application information for a specific site using SentinelOne's API. This process requires the use of the generated API token for secure access.
 ![Token Generation Process](https://github.com/smgorelik/API-Integration-Examples/blob/main/SentinelOne/Gen_Token.png)
 
 _After obtaining your API token, configure it along with the Management URL in the Secrets.config XML file_
+
+## Integration with Sophos
+Sophos, a widely recognized EDR/EPP provider, offers API integration to retrieve crucial security data. To initiate this integration, you need to generate a Client ID and Client Secret, which are essential for authenticating your API requests.
+1. Access Global Settings: Navigate to the global settings in the Sophos platform.
+![Global Settings](https://github.com/smgorelik/API-Integration-Examples/blob/main/Sophos/Get_API.png)
+2. Generate New Credentials - Create new credentials in the global settings. Ensure that you assign at least the "Service Principal ReadOnly" role for these credentials
+![New Cred](https://github.com/smgorelik/API-Integration-Examples/blob/main/Sophos/Gen_Token.png)
+3. Obtain your Client ID and Client Secret
+![Gen Token](https://github.com/smgorelik/API-Integration-Examples/blob/main/Sophos/Token.png)
+After obtaining your Client ID and Client Secret, update the Secrets.config file
+
+Token Generation and Usage:
+The provided code facilitates the generation of a temporary token using these credentials. This token is valid for 1 hour and will be used for all API queries. Subsequent requests will require token regeneration upon expiration.
+Retrieving Devices:
+Device retrieval varies depending on whether your organization is in a multi-tenant or single-tenant setup. The code examples detail the implementation for each case.
