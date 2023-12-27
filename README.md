@@ -48,4 +48,5 @@ To begin integrating with the Trend ApexOne API, you will need to generate an AP
 ![New KEY](https://github.com/smgorelik/API-Integration-Examples/blob/main/TrendApexOne/Get_API_KEY.png)
 It appears that the APPLICATION_ID and API_KEY do not have an expiry date, which implies they provide long-term access unless manually revoked or updated.
 
+
 _Update Secrets.config File With your APPLICATION_ID, API_KEY and SERVER_HOST_ 
