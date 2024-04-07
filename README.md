@@ -9,6 +9,22 @@ For API authentication without user interaction, a secret token must be generate
 
 _Developers utilizing this code must define their secret token and other necessary credentials in the Secrets.config XML file. This file should include entries for tenantId, clientId, SecretId, and SecretValue under appSettings_
 
+## Integration with CrowdStrike EDR (Falcon Prevent)
+CrowdStrike, a widely recognized EDR/EPP provider, offers API integration to retrieve and manipulate crucial security data. To initiate this integration, you need to generate a Client ID and Client Secret, which are essential for authenticating your API requests.
+1. Access Support and resources: Navigate to the API clients and keys in the CrowdStrike platform.
+![API clients and keys](https://github.com/smgorelik/API-Integration-Examples/blob/main/CrowdStrike/FindAPI.PNG)
+2. Generate API client - Create new API. Ensure that you assign at least the "Hosts" role to retrieve hosts from the platform, note, some roles may not be present if you do not have the exposure management license (e.g. vulnerabilities)
+![New Cred](https://github.com/smgorelik/API-Integration-Examples/blob/main/CrowdStrike/CreateAPI.PNG)
+
+After obtaining your Client ID and Client Secret, update the Secrets.config file. Note, you will be also presented a base url as soon as API is generated, you may copy this base URL into the same Secrets.config file.
+
+Token Generation and Usage:
+The provided code facilitates the generation of a temporary auth2 token using these credentials. This token is valid for 30 minutes and will be used for all API queries. Subsequent requests will require token regeneration upon expiration.
+
+Retrieving Devices:
+Please note that the current code is limited to 5000 devices retrieval, if there is a need to retrieve more devices, please split the "ids" list in "PrintDeviceInfo" function. 
+CrowdStrike API Link - https://falcon.us-2.crowdstrike.com/documentation/ (note, the url is dependent on the region you are signed into)
+
 ## Integration with Qualys VMP
 Qualys VMP, a renowned vendor for vulnerability prioritization, differs in its approach to API integration. Unlike vendors that use API tokens, Qualys VMP requires the provision of a username, password, and server URL for integration. These credentials should be securely stored in the Secrets.config XML file
 _Ensure that these credentials are correctly configured to establish a successful connection with Qualys_
