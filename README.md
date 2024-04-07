@@ -13,14 +13,14 @@ _Developers utilizing this code must define their secret token and other necessa
 Qualys VMP, a renowned vendor for vulnerability prioritization, differs in its approach to API integration. Unlike vendors that use API tokens, Qualys VMP requires the provision of a username, password, and server URL for integration. These credentials should be securely stored in the Secrets.config XML file
 _Ensure that these credentials are correctly configured to establish a successful connection with Qualys_
 
-## Integration with SentinelOne
+## Integration with SentinelOne EDR
 SentinelOne, a leading EDR (Endpoint Detection and Response) vendor, enables API integration through the generation of a user-specific token. Each user can generate one token, used for authenticating REST API requests.
 Our examples focus on retrieving device and application information for a specific site using SentinelOne's API. This process requires the use of the generated API token for secure access.
 ![Token Generation Process](https://github.com/smgorelik/API-Integration-Examples/blob/main/SentinelOne/Gen_Token.png)
 
 _After obtaining your API token, configure it along with the Management URL in the Secrets.config XML file_
 
-## Integration with Sophos
+## Integration with Sophos EDR
 Sophos, a widely recognized EDR/EPP provider, offers API integration to retrieve crucial security data. To initiate this integration, you need to generate a Client ID and Client Secret, which are essential for authenticating your API requests.
 1. Access Global Settings: Navigate to the global settings in the Sophos platform.
 ![Global Settings](https://github.com/smgorelik/API-Integration-Examples/blob/main/Sophos/Get_API.png)
@@ -37,3 +37,16 @@ Retrieving Devices:
 Device retrieval varies depending on whether your organization is in a multi-tenant or single-tenant setup. The code examples detail the implementation for each case.
 
 Sophos API Link - https://developer.sophos.com/getting-started-organization
+
+## Integration with Trend ApexOne EDR
+Trend ApexOne EDR, commonly installed on server environments and used by SMEs for endpoint protection, offers a streamlined API integration process. This integration primarily involves the generation of an HS256 JWT token, based on the APPLICATION_ID and API_KEY.
+
+Generating APPLICATION_ID and API_KEY:
+To begin integrating with the Trend ApexOne API, you will need to generate an APPLICATION_ID and an API_KEY. These credentials can be obtained as follows:
+1. Access Automation API Access Settings: In the Trend ApexOne platform, navigate to Administration -> Settings.
+2. Generate Credentials: In the Automation API Access Settings, you can generate the required APPLICATION_ID and API_KEY.
+![New KEY](https://github.com/smgorelik/API-Integration-Examples/blob/main/TrendApexOne/Get_API_KEY.png)
+It appears that the APPLICATION_ID and API_KEY do not have an expiry date, which implies they provide long-term access unless manually revoked or updated.
+
+
+_Update Secrets.config File With your APPLICATION_ID, API_KEY and SERVER_HOST_ 
